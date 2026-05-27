@@ -14,6 +14,13 @@ const createToken = (userId) =>
 export async function registerUser(req,res) {
         const {name, email, password} = req.body;
 
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: "Server configuration error: JWT_SECRET is not set",
+            });
+        }
+
         if(!name || !email || !password){
             return res.status(400).json({success: false, message: "All fields are reqired"});
         }
@@ -60,6 +67,14 @@ export async function registerUser(req,res) {
 //to login a user
 export async function loginUser(req,res){
     const {email, password} = req.body;
+
+    if (!process.env.JWT_SECRET) {
+        return res.status(500).json({
+            success: false,
+            message: "Server configuration error: JWT_SECRET is not set",
+        });
+    }
+
     if(!email || !password){
         return res.status(400).json({success: false, message: "All fields are reqired"});
     }
